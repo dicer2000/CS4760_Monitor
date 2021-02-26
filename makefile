@@ -1,7 +1,7 @@
-# Improved Makefile by Brett Huffman v1.1
+# Improved Makefile by Brett Huffman v1.2
 # (c)2021 Brett Huffman
-# To use, just change the next line to the name of
-# the application
+# This includes 3 executables and the first
+# being combined with a static library
 
 # App 1 - builds the monitor program
 appname1 := monitor
