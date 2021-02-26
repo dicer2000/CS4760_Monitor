@@ -38,6 +38,8 @@ To run the program, use the master command.  You can use any of the attributes l
 
 ## Problems / Issues
 
+Well, the biggest day-one issue was getting a static library to work with make and the main application.  It turns out it's pretty easy... just a small learning curve to some of this other stuff.
+
 
 
 ## Work Log
