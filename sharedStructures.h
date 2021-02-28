@@ -41,11 +41,12 @@ union semun {
 enum state { idle, want_in, in_cs };
 
 // Shared Memory structure
-struct AddItem {
+struct ProductItem {
+    pid_t producerPIDAssigned;      // Producer PID
+    pid_t consumerPIDAssigned;      // Consumer PID
     bool readyToProcess;    // Ready to Process
-    pid_t pidAssigned;      // In-Process
+    bool logged;            // Logged Process
     bool complete;          // Completed Process
-    int nodeDepth;          // Depth that this node is processing
     int itemValue;          // The actual value
     state itemState;        // The Critical Secion Flag
 };
@@ -54,5 +55,8 @@ key_t key = 0;  // Shared key
 int shm_id; // Shared Mem ident
 char* shm_addr;
 
-const char* HostProcess = "./monitor";
+// The size of our product queue
+const int PRODUCT_QUEUE_LENGTH = 20;
+
+const char* ProducerProcess = "./producer";
 const char* ChildProcess = "./consumer";

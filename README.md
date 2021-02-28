@@ -40,10 +40,13 @@ To run the program, use the master command.  You can use any of the attributes l
 
 Well, the biggest day-one issue was getting a static library to work with make and the main application.  It turns out it's pretty easy... just a small learning curve to some of this other stuff.
 
+Monitors are now the big question of the day.  I'm reviewing the lecture and also some online resources.  My question is should it be implemented all within the monitor?  Or maybe it should be partially in the monitor and then also in the consumer.  Or maybe the consumer calls the monitor to lock?  I'm not sure how it works together.
 
 
 ## Work Log
 
 - 2/25/2021 - Created project, Makefile, this readme file and got it all to compile; Built the static monitor library and got it to compile and work with make.
+- 2/26/2021 - Researched monitors; Started working up how it will integrated
+- 2/27/2021 - Added monitors and shared memory
 
 *©2021 Brett W. Huffman*

@@ -6,12 +6,16 @@
 # App 1 - builds the monitor program
 appname1 := monitor
 srcfiles := $(shell find . -name "monitor*.cpp")
+LDLIBS := $(shell find . -name "*.a")
 objects1  := $(patsubst %.cpp, %.o, $(srcfiles))
+liboptions := -lm
 
 all: $(appname1)
 
-$(appname1): $(objects1) libmonitor.a
+$(appname1): $(objects1) $(LDLIBS)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(appname1) $(objects1) $(LDLIBS)
+	
+#-lmylib -lm
 
 # Static monitor library
 libmonitor.a: libmonitor.o

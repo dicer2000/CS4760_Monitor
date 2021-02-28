@@ -10,6 +10,6 @@
 
 using namespace std;
 
-// Master Function Declarations
-int processMonitor(int numberOfChildrenAllowed, int timeInSecondsToTerminate, string InputDataFile);
-int forkProcess(int nItemStart, int nDepth);
+// Function Declarations
+int monitorProcess(string, int, int, int);
+int forkProcess(string);

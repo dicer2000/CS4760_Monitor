@@ -18,8 +18,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "libmonitor.h"
 #include <errno.h>
+#include "libmonitor.h"
 
 // Constants
 const int MaxNumberOfChildren = 20;
@@ -28,9 +28,15 @@ const int MaxNumberOfSeconds = 100;
 // Forward declarations
 static void show_usage(std::string);
 
+using namespace std;
+
 // Main - expecting arguments
 int main(int argc, char* argv[])
 {
+    // This main area will only handle the processing
+    // of the incoming arguments. After that, all processing
+    // will happen within the llibmonitor library functions.
+
     // Argument processing
     int opt;
     string strLogFile = "logfile"; // Default setting
@@ -82,27 +88,15 @@ int main(int argc, char* argv[])
     nNumberOfConsumers = min(nNumberOfConsumers, MaxNumberOfChildren-nNumberOfProducers);
     nNumberOfSeconds = min(nNumberOfSeconds, MaxNumberOfSeconds);
 
-    // Check that a data file has been passed in to process
-    int index = optind;
-    if(index < argc)
-    {
-        // Get the string to process
-        string FileToProcess = argv[index];
+    // Output what is going to happen
+    cout << "Monitor starting: " << endl 
+        << "\t" << nNumberOfProducers << " Producers" << endl
+        << "\t" << nNumberOfConsumers << " Consumers" << endl
+        << "\t" << nNumberOfSeconds  << " Max Seconds" << endl << endl;
 
-        // Output what is going to happen
-        cout << "Monitor starting: " << endl 
-            << "\t" << nNumberOfProducers << " Producers" << endl
-            << "\t" << nNumberOfConsumers << " Consumers" << endl
-            << "\t" << nNumberOfSeconds  << " Max Seconds" << endl << endl;
+    // Start the monitor process, returning whatever monitor returns.
+    return monitorProcess(strLogFile, nNumberOfProducers, nNumberOfConsumers, nNumberOfSeconds);
 
-        // Start the Master process, returning whatever master returns.
-//        return processMaster(nNumberOfChildren, nNumberOfSeconds, FileToProcess);
-    }
-
-    // Otherwise, an error -- must pass a filename
-    perror ("Error: You must enter a data file to process");
-    show_usage(argv[0]);
-    return EXIT_FAILURE;
 }
 
 
