@@ -47,6 +47,6 @@ Monitors are now the big question of the day.  I'm reviewing the lecture and als
 
 - 2/25/2021 - Created project, Makefile, this readme file and got it all to compile; Built the static monitor library and got it to compile and work with make.
 - 2/26/2021 - Researched monitors; Started working up how it will integrated
-- 2/27/2021 - Added monitors and shared memory
+- 2/27/2021 - Added monitors and shared memory.  As I told my wife, "Everything but the hard stuff."
 
 *©2021 Brett W. Huffman*
