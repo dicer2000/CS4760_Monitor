@@ -15,11 +15,12 @@
 #include <vector>
 #include <unistd.h>
 
+#include "libmonitor.h"
 #include "sharedStructures.h"
 
 // Static process counter => Never > 20 (1 Parent + 19 Children)
-const int MAX_PROCESSES = 19;
 static int ProcessCount = 0;
+const int MAX_PROCESSES = 19;
 const int BUFFERSIZE = 8192;
 
 using namespace std;
@@ -27,6 +28,7 @@ using namespace std;
 // Important Item queues + arrays
 struct ProductItem* productItemQueue;
 vector<int> vecProducers;
+vector<int> vecConsumers;
 
 // SIGINT handling
 volatile sig_atomic_t sigIntFlag = 0;
@@ -50,9 +52,13 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
   // Register SIGINT handling
   signal(SIGINT, sigintHandler);
   bool isKilled = false;
+  bool bComplete = false;
 
   // Start Time for time Analysis
   time_t secondsStart;
+  // Get the time in seconds for our process to make
+  // sure we don't exceed the max amount of processing time
+  secondsStart = time(NULL);   // Start time
 
   // Setup shared memory
   // allocate a shared memory segment with size of struct array
@@ -82,12 +88,18 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
       productItemQueue[i].itemValue = 0;
       productItemQueue[i].itemState = idle;
   }
+  
   // Start up producers by fork/exec nNumberOfProducers
+  cout << "Starting producers" << endl;
   for(int i=0; i < nNumberOfProducers; i++)
   {
     // Fork and store pid Producer Vector
-//    int pid = forkProcess(nCheck1, i);
-//    vecProducers.push_back(pid);
+    int pid = forkProcess(ProducerProcess);
+    if(pid > 0)
+    {
+      vecProducers.push_back(pid);
+      cout << "Producer " << vecProducers[i] << " started" << endl;
+    }
   }
 
   // Check that we actually have some producers
@@ -98,10 +110,56 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
     isKilled = true;
   }
 
+  // Keep track of waits & pids
+  pid_t waitPID;
+  int wstatus;
+
   // Loop until timeout or interrupt exit
   while(!isKilled && !sigIntFlag && !((time(NULL)-secondsStart) > nSecondsToTerminate))
   {
+    // If any new products show up, create a new consumer to consume it
+//    vecConsumers <= Keep this array up-to-date with new ones
 
+    // Note :: We use the WNOHANG to call waitpid without blocking
+    // If it returns 0, it does not have a PID waiting
+    waitPID = waitpid(-1, &wstatus, WNOHANG | WUNTRACED | WCONTINUED);
+
+
+    // No PIDs are in-process
+    if (isKilled) {
+      bComplete = true;   // We say true so that we exit out of main
+      break;              // loop and free up all necessary data
+    }
+
+    // Child processed correctly
+    if (WIFEXITED(wstatus) && waitPID > 0)
+    {
+      // Decrement our ProcessCounter
+      ProcessCount--;
+    
+    } else if (WIFSIGNALED(wstatus) && waitPID > 0) {
+        cout << waitPID << " killed by signal " << WTERMSIG(wstatus) << endl;
+    } else if (WIFSTOPPED(wstatus) && waitPID > 0) {
+        cout << waitPID << " stopped by signal " << WTERMSIG(wstatus) << endl;
+    } else if (WIFCONTINUED(wstatus) && waitPID > 0) {
+        continue;
+    }
+
+  }
+
+  // Signal to the producers to shutdown
+  cout << "Shutting down producers" << endl;
+  for(int i=0; i < vecProducers.size(); i++)
+  {
+    kill(vecProducers[i], SIGQUIT); 
+    cout << "Producer " << vecProducers[i] << " shutdown" << endl;
+  }
+
+  cout << "Shutting down consumers" << endl;
+  for(int i=0; i < vecConsumers.size(); i++)
+  {
+    kill(vecConsumers[i], SIGQUIT); 
+    cout << "Consumer " << vecConsumers[i] << " shutdown" << endl;
   }
 
   // Breakdown shared memory

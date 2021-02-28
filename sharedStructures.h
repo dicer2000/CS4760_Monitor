@@ -47,7 +47,8 @@ struct ProductItem {
     bool readyToProcess;    // Ready to Process
     bool logged;            // Logged Process
     bool complete;          // Completed Process
-    int itemValue;          // The actual value
+    float itemValue;        // The actual "Product" being returned 
+                            // from the Producer - A little Easter Egg
     state itemState;        // The Critical Secion Flag
 };
 
