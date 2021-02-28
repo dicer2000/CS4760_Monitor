@@ -1,4 +1,4 @@
-# Improved Makefile by Brett Huffman v1.2
+# Improved Makefile by Brett Huffman v1.3
 # (c)2021 Brett Huffman
 # This includes 3 executables and the first
 # being combined with a static library
@@ -6,19 +6,17 @@
 # App 1 - builds the monitor program
 appname1 := monitor
 srcfiles := $(shell find . -name "monitor*.cpp")
-LDLIBS := $(shell find . -name "*.a")
+#LDLIBS := $(shell find . -name "*.a")
+LDLIBS := libmonitor.a
 objects1  := $(patsubst %.cpp, %.o, $(srcfiles))
-liboptions := -lm
 
 all: $(appname1)
 
 $(appname1): $(objects1) $(LDLIBS)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(appname1) $(objects1) $(LDLIBS)
-	
-#-lmylib -lm
 
 # Static monitor library
-libmonitor.a: libmonitor.o
+$(LDLIBS): libmonitor.o
 	ar $(ARFLAGS) $@ $^
 
 # App 2 - builds the producer program
