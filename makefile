@@ -5,8 +5,11 @@
 
 # App 1 - builds the monitor program
 appname1 := monitor
-srcfiles := $(shell find . -name "monitor*.cpp")
-#LDLIBS := $(shell find . -name "*.a")
+srcfiles := $(shell find . -name "monitor*.cpp") ./productSemaphores.cpp
+
+# For debugging
+#$(error   VAR is $(srcfiles))
+
 LDLIBS := libmonitor.a
 objects1  := $(patsubst %.cpp, %.o, $(srcfiles))
 
@@ -21,7 +24,7 @@ $(LDLIBS): libmonitor.o
 
 # App 2 - builds the producer program
 appname2 := producer
-srcfiles := $(shell find . -name "producer*.cpp")
+srcfiles := $(shell find . -name "producer*.cpp") ./productSemaphores.cpp
 objects2  := $(patsubst %.cpp, %.o, $(srcfiles))
 
 all: $(appname2)
@@ -31,7 +34,7 @@ $(appname2): $(objects2)
 
 # App 3 - builds the consumer program
 appname3 := consumer
-srcfiles := $(shell find . -name "consumer*.cpp")
+srcfiles := $(shell find . -name "consumer*.cpp") ./productSemaphores.cpp
 objects3  := $(patsubst %.cpp, %.o, $(srcfiles))
 
 all: $(appname3)

@@ -37,6 +37,8 @@ int main(int argc, char* argv[])
     // of the incoming arguments. After that, all processing
     // will happen within the llibmonitor library functions.
 
+    cout << endl << "monitor app by Brett Huffman for CMP SCI 4760" << endl << endl;
+
     // Argument processing
     int opt;
     string strLogFile = "logfile"; // Default setting

@@ -10,8 +10,9 @@
  ********************************************/
 #include <iostream>
 #include <unistd.h>
-#include "sharedStructures.h"
 #include <fstream>
+#include "sharedStructures.h"
+#include "productSemaphores.h"
 
 // Forward Declarations
 static void show_usage(std::string);
@@ -37,7 +38,19 @@ int main(int argc, char* argv[])
 
   int turn = 0;   // Used for Critical Section
   int myPID = getpid(); // ProducerID to log
-    
+  
+  // Find the necessary Semaphores
+  productSemaphores s(KEY_MUTEX, false);
+  productSemaphores n(KEY_EMPTY, false);
+  productSemaphores e(KEY_FULL, false);
+
+  if(!s.isInitialized() || !n.isInitialized() || !e.isInitialized())
+  {
+    perror("Producer: Could not successfully find Semaphores");
+    exit(EXIT_FAILURE);
+  }
+
+
   // Loop until signaled to shutdown via SIGINT
   while(!sigQuitFlag)
   {
@@ -54,10 +67,17 @@ int main(int argc, char* argv[])
     // pi and return it as my product
     float fEasterEgg = 355.0f/113.0f;
 
+    // Get Exclusive Access via Semaphores
+    e.Wait();
+    s.Wait();
+
     // Push this onto the Queue
 
     // Log what happened into System Log
-    
+    WriteLogFile("Produced Item");
+
+    s.Signal();
+    n.Signal();
   }
 
 

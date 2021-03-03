@@ -17,6 +17,7 @@
 
 #include "libmonitor.h"
 #include "sharedStructures.h"
+#include "productSemaphores.h"
 
 // Static process counter => Never > 20 (1 Parent + 19 Children)
 static int ProcessCount = 0;
@@ -60,6 +61,18 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
   // sure we don't exceed the max amount of processing time
   secondsStart = time(NULL);   // Start time
 
+  // Create the necessary Semaphores
+  // The last parameter tells whether to create a new semaphore
+  // or just attach to an existing one
+  productSemaphores s(KEY_MUTEX, true);
+  productSemaphores n(KEY_EMPTY, true);
+  productSemaphores e(KEY_FULL, true);
+
+  if(!s.isInitialized() || !n.isInitialized() || !e.isInitialized())
+  {
+    perror("Monitor: Could not successfully create Semaphores");
+    exit(EXIT_FAILURE);
+  }
   // Setup shared memory
   // allocate a shared memory segment with size of struct array
   int memSize = sizeof(ProductItem) * PRODUCT_QUEUE_LENGTH;
@@ -86,7 +99,7 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
       productItemQueue[i].logged = false;
       productItemQueue[i].complete = false;
       productItemQueue[i].itemValue = 0;
-      productItemQueue[i].itemState = idle;
+//      productItemQueue[i].itemState = idle;
   }
   
   // Start up producers by fork/exec nNumberOfProducers

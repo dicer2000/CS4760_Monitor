@@ -8,6 +8,31 @@ A log was kept of each day's activity.  It is found at the end of this README fi
 
 A Git repository was maintained with a public remote found here: https://github.com/dicer2000/CS4760_Monitor.git
 
+## Assumptions
+
+There were some items I didn't understand about the project's operation.  Based on the feedback I did receive, I made these assumptions:
+
+1. Per my 2/27 conversation with Dr. Bhatia, Consumers will be created in response to new products waiting to be consumed.  They will do their job, then terminate.
+
+2. The queue that holds the Producer's products will be limited in size due to the use of Shared Memory, which does not lend itself well to dynamic templates.  So, I'm implementing it as a circular queue (or ring buffer).  The whole shared memory will look like this (I think):
+```
+            +----------------+
+Queue header| pNextQueueItem |
+            | pCurrent       |
+            | QueueSize      |
+            +----------------+
+Queue array | 1              |
+            +----------------+
+            | 2              |
+            +----------------+
+            | ...            |
+            +----------------+
+            | n              |
+            +----------------+
+```
+3. Built the semaphores with System V Semaphores per Jared's 2/28 chat.
+
+
 ## Program Switches
 The program can be invoked as:
 
@@ -48,5 +73,7 @@ Monitors are now the big question of the day.  I'm reviewing the lecture and als
 - 2/25/2021 - Created project, Makefile, this readme file and got it all to compile; Built the static monitor library and got it to compile and work with make.
 - 2/26/2021 - Researched monitors; Started working up how it will integrated
 - 2/27/2021 - Added monitors and shared memory.  As I told my wife, "Everything but the hard stuff."
+- 2/28/2021 - Spent the day trying to figure out how to address the issue of Semaphores in this project.  Going to build them with System V Semaphores
+- 3/2/2021  - Added semiphores per Jared's directions; Debugging
 
 *©2021 Brett W. Huffman*
