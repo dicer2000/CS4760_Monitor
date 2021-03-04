@@ -74,6 +74,6 @@ Monitors are now the big question of the day.  I'm reviewing the lecture and als
 - 2/26/2021 - Researched monitors; Started working up how it will integrated
 - 2/27/2021 - Added monitors and shared memory.  As I told my wife, "Everything but the hard stuff."
 - 2/28/2021 - Spent the day trying to figure out how to address the issue of Semaphores in this project.  Going to build them with System V Semaphores
-- 3/2/2021  - Added semiphores per Jared's directions; Debugging
+- 3/2/2021  - Added semiphores per Jared's directions; Debugging; Started building the magical Ring Buffer => Cool stuff
 
 *©2021 Brett W. Huffman*

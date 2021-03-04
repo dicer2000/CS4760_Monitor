@@ -5,7 +5,7 @@
 
 using namespace std;
 
-productSemaphores::productSemaphores(key_t key, bool Create)
+productSemaphores::productSemaphores(key_t key, bool Create, int Value)
 {
     // If a valid key
     if(key > 0)
@@ -14,10 +14,10 @@ productSemaphores::productSemaphores(key_t key, bool Create)
         if(Create)
         {
             _semid = semget(key, 1, SEM_R | SEM_A | IPC_EXCL | IPC_CREAT);
-            // If successful, set it's value to 1
+            // If successful, set it's value to Value
             if (_semid > 0)
             {
-                semctl(_semid, 0, SETVAL, 1);
+                semctl(_semid, 0, SETVAL, Value);
                 // Write success to log file
 
                 // Set as the creator of the Sem
@@ -57,7 +57,6 @@ void productSemaphores::Wait()
     structSemaBuf.sem_flg = 0;
     semop(_semid, &structSemaBuf, 1);
 	cout << "wait: " << _semid << endl;
-
 }
 
 // Semaphore Signal

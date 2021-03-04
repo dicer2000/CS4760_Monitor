@@ -27,6 +27,7 @@ const int BUFFERSIZE = 8192;
 using namespace std;
 
 // Important Item queues + arrays
+struct ProductHeader* productHeader;
 struct ProductItem* productItemQueue;
 vector<int> vecProducers;
 vector<int> vecConsumers;
@@ -61,12 +62,11 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
   // sure we don't exceed the max amount of processing time
   secondsStart = time(NULL);   // Start time
 
-  // Create the necessary Semaphores
-  // The last parameter tells whether to create a new semaphore
-  // or just attach to an existing one
-  productSemaphores s(KEY_MUTEX, true);
-  productSemaphores n(KEY_EMPTY, true);
-  productSemaphores e(KEY_FULL, true);
+  // Create the necessary Semaphores with the
+  // productSemaphores class
+  productSemaphores s(KEY_MUTEX, true, 1);
+  productSemaphores n(KEY_EMPTY, true, 0);
+  productSemaphores e(KEY_FULL, true, PRODUCT_QUEUE_LENGTH);
 
   if(!s.isInitialized() || !n.isInitialized() || !e.isInitialized())
   {
@@ -81,14 +81,23 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
       perror("shmget: ");
       exit(EXIT_FAILURE);
   }
+  
   // attach the shared memory segment to our process's address space
   shm_addr = (char*)shmat(shm_id, NULL, 0);
   if (!shm_addr) { /* operation failed. */
       perror("shmat: ");
       exit(EXIT_FAILURE);
   }
+  // Get the queue header
+  productHeader = (struct ProductHeader*) (shm_addr);
   // Get our entire queue
-  productItemQueue = (struct ProductItem*) (shm_addr+sizeof(int));
+  productItemQueue = (struct ProductItem*) (shm_addr+sizeof(productHeader));
+
+//  productItemQueue = (struct ProductItem*) (shm_addr+sizeof(int));
+  // Fill the product header
+  productHeader->pCurrent = productHeader->pNextQueueItem = 0;
+  productHeader->QueueSize = PRODUCT_QUEUE_LENGTH;
+
 
   // Set all items in queue to empty
   for(int i=0; i < PRODUCT_QUEUE_LENGTH; i++)

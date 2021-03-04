@@ -31,7 +31,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
   // Randomize the seed
-  srand(time(NULL));
+  srand(time(nullptr));
 
   // Register SIGQUIT handling
   signal(SIGINT, sigQuitHandler);
@@ -50,6 +50,8 @@ int main(int argc, char* argv[])
     exit(EXIT_FAILURE);
   }
 
+  // Open the connection to shared memory
+  
 
   // Loop until signaled to shutdown via SIGINT
   while(!sigQuitFlag)
@@ -75,6 +77,8 @@ int main(int argc, char* argv[])
 
     // Log what happened into System Log
     WriteLogFile("Produced Item");
+
+    cout << myPID << " Produced Item: " << nSleepTime << endl;
 
     s.Signal();
     n.Signal();

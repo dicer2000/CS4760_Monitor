@@ -25,7 +25,7 @@ class productSemaphores
 
     public:
 
-    productSemaphores(key_t, bool);
+    productSemaphores(key_t, bool, int = 1);
     ~productSemaphores();
 
     // Check if properly setup

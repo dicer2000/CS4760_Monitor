@@ -32,7 +32,12 @@ extern int opterr;
 // Critical Section Processing
 enum state { idle, want_in, in_cs };
 
-// Shared Memory structure
+// Shared Memory structures
+struct ProductHeader {
+    int pNextQueueItem; // Pointer to next item for Producer
+    int pCurrent;       // Pointer to next item for Consumer
+    size_t QueueSize;   // Size of the queue
+};
 struct ProductItem {
     pid_t producerPIDAssigned;      // Producer PID
     pid_t consumerPIDAssigned;      // Consumer PID
@@ -94,7 +99,7 @@ std::string GetTimeFormatted(const char* prePendString)
 bool WriteLogFile(std::string strLogEntry)
 {
     // Open a file to write
-    std::ofstream logFile (ProductLogFile);
+    std::ofstream logFile (ProductLogFile, std::ofstream::out | std::ofstream::app);
     if (logFile.is_open())
     {
         // Get the current local time
