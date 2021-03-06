@@ -14,7 +14,7 @@ productSemaphores::productSemaphores(key_t key, bool Create, int Value)
         if(Create)
         {
             #if defined(__linux__)
-            _semid = semget(key, 1, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH | IPC_EXCL | IPC_CREAT);
+            _semid = semget(key, 1, IPC_EXCL | IPC_CREAT);
             #else
             _semid = semget(key, 1, SEM_R | SEM_A | IPC_EXCL | IPC_CREAT);
             #endif
@@ -34,7 +34,7 @@ productSemaphores::productSemaphores(key_t key, bool Create, int Value)
         {
             // Get an already created Semaphore
             #if defined(__linux__)
-            _semid = semget(key, 1, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+            _semid = semget(key, 1);
             #else
             _semid = semget(key, 1, SEM_R | SEM_A);
             #endif
