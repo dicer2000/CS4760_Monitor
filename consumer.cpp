@@ -32,6 +32,8 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+  // Seed the randomizer
+  srand(time(NULL));
 
   // Register SIGQUIT handling
   signal(SIGINT, sigQuitHandler);
