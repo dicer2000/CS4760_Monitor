@@ -96,8 +96,8 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
 
 //  productItemQueue = (struct ProductItem*) (shm_addr+sizeof(int));
   // Fill the product header
-  productHeader->pCurrent = 2;
-  productHeader->pNextQueueItem = 5;
+  productHeader->pCurrent = 0;
+  productHeader->pNextQueueItem = 0;
   productHeader->QueueSize = PRODUCT_QUEUE_LENGTH;
 
   // Set all items in queue to empty
