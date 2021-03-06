@@ -74,14 +74,15 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
     exit(EXIT_FAILURE);
   }
   // Setup shared memory
-  // allocate a shared memory segment with size of struct array
-  int memSize = sizeof(ProductItem) * PRODUCT_QUEUE_LENGTH;
-  shm_id = shmget(key, memSize, IPC_CREAT | IPC_EXCL | 0660);
+  // allocate a shared memory segment with size of 
+  // Product Header + entire Product array
+  int memSize = sizeof(ProductHeader) + sizeof(ProductItem) * PRODUCT_QUEUE_LENGTH;
+  shm_id = shmget(KEY_SHMEM, memSize, IPC_CREAT | IPC_EXCL | 0660);
   if (shm_id == -1) {
       perror("shmget: ");
       exit(EXIT_FAILURE);
   }
-  
+
   // attach the shared memory segment to our process's address space
   shm_addr = (char*)shmat(shm_id, NULL, 0);
   if (!shm_addr) { /* operation failed. */
@@ -91,13 +92,17 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
   // Get the queue header
   productHeader = (struct ProductHeader*) (shm_addr);
   // Get our entire queue
-  productItemQueue = (struct ProductItem*) (shm_addr+sizeof(productHeader));
+  productItemQueue = (struct ProductItem*) (shm_addr+sizeof(int)+sizeof(productHeader));
 
 //  productItemQueue = (struct ProductItem*) (shm_addr+sizeof(int));
   // Fill the product header
-  productHeader->pCurrent = productHeader->pNextQueueItem = 0;
+  productHeader->pCurrent = -1;
+  productHeader->pNextQueueItem = 0;
   productHeader->QueueSize = PRODUCT_QUEUE_LENGTH;
 
+  cout << "1-1:" << productHeader->pCurrent << endl;
+  cout << "1-2:" << productHeader->pNextQueueItem << endl;
+  cout << "1-3:" << productHeader->QueueSize << endl;
 
   // Set all items in queue to empty
   for(int i=0; i < PRODUCT_QUEUE_LENGTH; i++)
@@ -139,7 +144,15 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
   // Loop until timeout or interrupt exit
   while(!isKilled && !sigIntFlag && !((time(NULL)-secondsStart) > nSecondsToTerminate))
   {
-    // If any new products show up, create a new consumer to consume it
+    // If any new products show up and < max processes are created,
+    // create a new consumer to consume it
+    if(productHeader->pNextQueueItem%productHeader->QueueSize >
+        productHeader->pCurrent%productHeader->QueueSize
+        && ProcessCount < nNumberOfConsumers)
+    {
+      // Fork a new process
+      forkProcess(ConsumerProcess);
+    }
 //    vecConsumers <= Keep this array up-to-date with new ones
 
     // Note :: We use the WNOHANG to call waitpid without blocking

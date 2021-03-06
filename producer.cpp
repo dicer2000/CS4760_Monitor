@@ -51,7 +51,45 @@ int main(int argc, char* argv[])
   }
 
   // Open the connection to shared memory
-  
+    // Allocate the shared memory
+    // And get ready for read/write
+    // Get a reference to the shared memory, if available
+    shm_id = shmget(KEY_SHMEM, 0, 0);
+    if (shm_id == -1) {
+        perror("shmget1: ");
+        exit(EXIT_FAILURE);
+    }
+
+    // Read the memory size and calculate the array size
+    struct shmid_ds shmid_ds;
+    shmctl(shm_id, IPC_STAT, &shmid_ds);
+    size_t realSize = shmid_ds.shm_segsz;
+//    int length = (int) shmid_ds.shm_segsz / sizeof(AddItem);
+
+    // Now we have the size - actually setup with shmget
+    shm_id = shmget(KEY_SHMEM, realSize, 0);
+    if (shm_id == -1) {
+        perror("shmget2: ");
+        exit(EXIT_FAILURE);
+    }
+
+    // attach the shared memory segment to our process's address space
+    shm_addr = (char*)shmat(shm_id, NULL, 0);
+    if (!shm_addr) { /* operation failed. */
+        perror("shmat: ");
+        exit(EXIT_FAILURE);
+    }
+
+    // Get the queue header
+    struct ProductHeader* productHeader = 
+        (struct ProductHeader*) (shm_addr);
+    // Get our entire queue
+    struct ProductItem*productItemQueue = 
+        (struct ProductItem*) (shm_addr+sizeof(int)+sizeof(productHeader));
+
+  cout << "2-1:" << productHeader->pCurrent << endl;
+  cout << "2-2:" << productHeader->pNextQueueItem << endl;
+  cout << "2-3:" << productHeader->QueueSize << endl;
 
   // Loop until signaled to shutdown via SIGINT
   while(!sigQuitFlag)
@@ -62,8 +100,17 @@ int main(int argc, char* argv[])
     // Sleep for my random time
     sleep(nSleepTime);
 
-    // Produce an item by putting a number on the queue
+    // The productHeader->pNextQueueItem => Next one to put new product in
+    // the productHeader->pCurrent => Next one to consume
 
+    // Check if an opening exists to put a new one in
+    if(productHeader->pNextQueueItem == productHeader->pCurrent)
+    {
+      cout << "In Hold" << endl;
+      continue; // No opening for a new one, just continue
+    }
+
+    // Produce an item by putting a number on the queue
     // As a little easter egg, since this is due pretty
     // close to PI day, I'm going to (loosly) calcuate
     // pi and return it as my product
@@ -74,16 +121,23 @@ int main(int argc, char* argv[])
     s.Wait();
 
     // Push this onto the Queue
+    productItemQueue[productHeader->pNextQueueItem].itemValue = fEasterEgg;
 
     // Log what happened into System Log
-    WriteLogFile("Produced Item");
+//    WriteLogFile("Produced Item in queue: " + productHeader->pNextQueueItem);
+    cout << myPID << " Produced Item in queue: " << productHeader->pNextQueueItem << endl;
 
-    cout << myPID << " Produced Item: " << nSleepTime << endl;
+    // Add an item to the next queue and wrap it around if it's > queue size
+    productHeader->pNextQueueItem = (++productHeader->pNextQueueItem)%productHeader->QueueSize;
+
+  // Debug print queue
+  for(int i=0;i<productHeader->QueueSize;i++ )
+    cout << productItemQueue[i].itemValue << " ";
+  cout << endl;
 
     s.Signal();
     n.Signal();
   }
-
 
     return 0;
 }

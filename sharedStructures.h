@@ -48,7 +48,7 @@ struct ProductItem {
                             // from the Producer - A little Easter Egg
 };
 
-key_t key = 0;  // Shared key
+const key_t KEY_SHMEM = 0x54321;  // Shared key
 int shm_id; // Shared Mem ident
 char* shm_addr;
 
