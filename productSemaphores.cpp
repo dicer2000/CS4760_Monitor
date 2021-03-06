@@ -56,7 +56,7 @@ void productSemaphores::Wait()
     structSemaBuf.sem_op = -1;
     structSemaBuf.sem_flg = 0;
     semop(_semid, &structSemaBuf, 1);
-	cout << "wait: " << _semid << endl;
+//	cout << "wait: " << _semid << endl;
 }
 
 // Semaphore Signal
@@ -66,6 +66,6 @@ void productSemaphores::Signal()
     structSemaBuf.sem_op = 1;
     structSemaBuf.sem_flg = 0;
     semop(_semid, &structSemaBuf, 1);
-	cout << "signal: " << _semid << endl;
+//	cout << "signal: " << _semid << endl;
 }
 

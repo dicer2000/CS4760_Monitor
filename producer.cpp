@@ -83,13 +83,9 @@ int main(int argc, char* argv[])
     // Get the queue header
     struct ProductHeader* productHeader = 
         (struct ProductHeader*) (shm_addr);
-    // Get our entire queue
+    // Get our queue right after the header
     struct ProductItem*productItemQueue = 
         (struct ProductItem*) (shm_addr+sizeof(int)+sizeof(productHeader));
-
-  cout << "2-1:" << productHeader->pCurrent << endl;
-  cout << "2-2:" << productHeader->pNextQueueItem << endl;
-  cout << "2-3:" << productHeader->QueueSize << endl;
 
   // Loop until signaled to shutdown via SIGINT
   while(!sigQuitFlag)
@@ -102,13 +98,6 @@ int main(int argc, char* argv[])
 
     // The productHeader->pNextQueueItem => Next one to put new product in
     // the productHeader->pCurrent => Next one to consume
-
-    // Check if an opening exists to put a new one in
-    if(productHeader->pNextQueueItem == productHeader->pCurrent)
-    {
-      cout << "In Hold" << endl;
-      continue; // No opening for a new one, just continue
-    }
 
     // Produce an item by putting a number on the queue
     // As a little easter egg, since this is due pretty
@@ -123,6 +112,9 @@ int main(int argc, char* argv[])
     // Push this onto the Queue
     productItemQueue[productHeader->pNextQueueItem].itemValue = fEasterEgg;
 
+    // Mark as ready to be Consumed
+    productItemQueue[productHeader->pNextQueueItem].readyToProcess = true;
+
     // Log what happened into System Log
 //    WriteLogFile("Produced Item in queue: " + productHeader->pNextQueueItem);
     cout << myPID << " Produced Item in queue: " << productHeader->pNextQueueItem << endl;
@@ -130,10 +122,14 @@ int main(int argc, char* argv[])
     // Add an item to the next queue and wrap it around if it's > queue size
     productHeader->pNextQueueItem = (++productHeader->pNextQueueItem)%productHeader->QueueSize;
 
+  cout << "p-pCurrent:" << productHeader->pCurrent << endl;
+  cout << "p-pNextQueue:" << productHeader->pNextQueueItem << endl;
+  cout << "p-QueueSize:" << productHeader->QueueSize << endl;
+
   // Debug print queue
-  for(int i=0;i<productHeader->QueueSize;i++ )
-    cout << productItemQueue[i].itemValue << " ";
-  cout << endl;
+//  for(int i=0;i<productHeader->QueueSize;i++ )
+//    cout << productItemQueue[i].itemValue << " ";
+//  cout << endl;
 
     s.Signal();
     n.Signal();

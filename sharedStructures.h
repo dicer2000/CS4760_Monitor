@@ -36,14 +36,10 @@ enum state { idle, want_in, in_cs };
 struct ProductHeader {
     int pNextQueueItem; // Pointer to next item for Producer
     int pCurrent;       // Pointer to next item for Consumer
-    size_t QueueSize;   // Size of the queue
+    int QueueSize;   // Size of the queue
 };
 struct ProductItem {
-    pid_t producerPIDAssigned;      // Producer PID
-    pid_t consumerPIDAssigned;      // Consumer PID
     bool readyToProcess;    // Ready to Process
-    bool logged;            // Logged Process
-    bool complete;          // Completed Process
     float itemValue;        // The actual "Product" being returned 
                             // from the Producer - A little Easter Egg
 };
@@ -62,8 +58,6 @@ struct shmseg {
    int write_complete;
    int read_complete;
 };
-
-//enum Sem_Op { WAITING = -1, WAITING, RELEASE };
 
 // The size of our product queue
 const int PRODUCT_QUEUE_LENGTH = 20;

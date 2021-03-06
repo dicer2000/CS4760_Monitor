@@ -12,7 +12,7 @@ A Git repository was maintained with a public remote found here: https://github.
 
 There were some items I didn't understand about the project's operation.  Based on the feedback I did receive, I made these assumptions:
 
-1. Per my 2/27 conversation with Dr. Bhatia, Consumers will be created in response to new products waiting to be consumed.  They will do their job, then terminate.
+1. Per my 2/27 conversation with Dr. Bhatia, the specified number of Producers and Consumers will be created and both will loop until the termination command (either timeout or Ctrl-C).
 
 2. The queue that holds the Producer's products will be limited in size due to the use of Shared Memory, which does not lend itself well to dynamic templates.  So, I'm implementing it as a circular queue (or ring buffer).  The whole shared memory will look like this (I think):
 ```
@@ -75,5 +75,8 @@ Monitors are now the big question of the day.  I'm reviewing the lecture and als
 - 2/27/2021 - Added monitors and shared memory.  As I told my wife, "Everything but the hard stuff."
 - 2/28/2021 - Spent the day trying to figure out how to address the issue of Semaphores in this project.  Going to build them with System V Semaphores
 - 3/2/2021  - Added semiphores per Jared's directions; Debugging; Started building the magical Ring Buffer => Cool stuff
+- 3/4/2021  - Built consumer; re-designed shared memory
+- 3/5/2021  - Debugging
+- 3/6/2021  - Continued debugging
 
 *©2021 Brett W. Huffman*

@@ -96,32 +96,23 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
 
 //  productItemQueue = (struct ProductItem*) (shm_addr+sizeof(int));
   // Fill the product header
-  productHeader->pCurrent = -1;
-  productHeader->pNextQueueItem = 0;
+  productHeader->pCurrent = 2;
+  productHeader->pNextQueueItem = 5;
   productHeader->QueueSize = PRODUCT_QUEUE_LENGTH;
-
-  cout << "1-1:" << productHeader->pCurrent << endl;
-  cout << "1-2:" << productHeader->pNextQueueItem << endl;
-  cout << "1-3:" << productHeader->QueueSize << endl;
 
   // Set all items in queue to empty
   for(int i=0; i < PRODUCT_QUEUE_LENGTH; i++)
   {
-      productItemQueue[i].producerPIDAssigned = 0;
-      productItemQueue[i].consumerPIDAssigned = 0;
       productItemQueue[i].readyToProcess = true;
-      productItemQueue[i].logged = false;
-      productItemQueue[i].complete = false;
-      productItemQueue[i].itemValue = 0;
-//      productItemQueue[i].itemState = idle;
+      productItemQueue[i].itemValue = 0.0f;
   }
   
   // Start up producers by fork/exec nNumberOfProducers
-  cout << "Starting producers" << endl;
+  cout << "Starting Producers" << endl;
   for(int i=0; i < nNumberOfProducers; i++)
   {
     // Fork and store pid Producer Vector
-    int pid = forkProcess(ProducerProcess);
+    pid_t pid = forkProcess(ProducerProcess);
     if(pid > 0)
     {
       vecProducers.push_back(pid);
@@ -133,7 +124,28 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
   if(vecProducers.size() < 1)
   {
     errno = ECANCELED;
-    perror("Could not create producers");
+    perror("Could not create Producers");
+    isKilled = true;
+  }
+
+  // Start up Consumers
+  cout << "Starting Consumers" << endl;
+  for(int i=0; i < nNumberOfConsumers; i++)
+  {
+    // Fork and store pid Producer Vector
+    pid_t pid = forkProcess(ConsumerProcess);
+    if(pid > 0)
+    {
+      vecConsumers.push_back(pid);
+      cout << "Consumer " << vecProducers[i] << " started" << endl;
+    }
+  }
+
+  // Check that we actually have some producers
+  if(vecConsumers.size() < 1)
+  {
+    errno = ECANCELED;
+    perror("Could not create Consumers");
     isKilled = true;
   }
 
@@ -146,14 +158,8 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
   {
     // If any new products show up and < max processes are created,
     // create a new consumer to consume it
-    if(productHeader->pNextQueueItem%productHeader->QueueSize >
-        productHeader->pCurrent%productHeader->QueueSize
-        && ProcessCount < nNumberOfConsumers)
-    {
-      // Fork a new process
-      forkProcess(ConsumerProcess);
-    }
-//    vecConsumers <= Keep this array up-to-date with new ones
+//    cout << productHeader->pNextQueueItem << " | " << productHeader->pCurrent << " \\ " << productHeader->QueueSize << endl;
+//    cout << productHeader->pNextQueueItem%productHeader->QueueSize << " | " << productHeader->pCurrent%productHeader->QueueSize << " \\ " << productHeader->QueueSize << endl;
 
     // Note :: We use the WNOHANG to call waitpid without blocking
     // If it returns 0, it does not have a PID waiting
