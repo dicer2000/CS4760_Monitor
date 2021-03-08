@@ -1,13 +1,13 @@
 /********************************************
- * productSemaphores - Semaphores Helper Class
- * Code from CMPSCI 4760
- * 
- * This is a helper class for this project use
- * of System V Semaphores.
+ * productSemaphores - Semaphores and Message Passing
+ * This is a special class to create & use
+ * product semaphores with the monitor app.
+ * (c)2021 Brett Huffman
  * 
  * Brett Huffman
  * CMP SCI 4760 - Project 3
  * Due Mar 12, 2021
+ * productSemaphores .h file for project
  ********************************************/
 #pragma once
 

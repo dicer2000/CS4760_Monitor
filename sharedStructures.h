@@ -90,7 +90,7 @@ std::string GetTimeFormatted(const char* prePendString)
 }
 
 // Log file writing helper function
-bool WriteLogFile(std::string strLogEntry)
+bool WriteLogFile(std::string& logString)
 {
     // Open a file to write
     std::ofstream logFile (ProductLogFile, std::ofstream::out | std::ofstream::app);
@@ -98,7 +98,9 @@ bool WriteLogFile(std::string strLogEntry)
     {
         // Get the current local time
 //        string 
-        logFile << GetTimeFormatted("").c_str() << " " << strLogEntry << std::endl;
+        logFile << GetTimeFormatted("").c_str();
+        logFile << " " << logString.c_str();
+        logFile << std::endl;
         logFile.close();
         return true;
     }
@@ -107,4 +109,15 @@ bool WriteLogFile(std::string strLogEntry)
         perror("Unable to write to log file");
         return false;
     }
+}
+
+// Returns a string from an int
+std::string GetStringFromInt(const int nVal)
+{
+    int length = snprintf( NULL, 0, "%d", nVal);
+    char* sDep = (char*)malloc( length + 1 );
+    snprintf( sDep, length + 1, "%d", nVal);
+    std::string strFinalVal = sDep;                    
+    free(sDep);
+    return strFinalVal;
 }

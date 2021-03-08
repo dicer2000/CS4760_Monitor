@@ -23,9 +23,6 @@ void sigQuitHandler(int sig){ // can be called asynchronously
   sigQuitFlag = 1; // set flag
 }
 
-// Critical Section Turn Flag
-extern int turn;
-
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -36,9 +33,14 @@ int main(int argc, char* argv[])
   // Register SIGQUIT handling
   signal(SIGINT, sigQuitHandler);
 
-  int turn = 0;   // Used for Critical Section
-  int myPID = getpid(); // ProducerID to log
+  int childPid = getpid(); // ProducerID to log
   
+  // Log startup of the child
+  string strLog = "Producer PID ";
+  strLog.append(GetStringFromInt(childPid));
+  strLog.append(" Started");
+  WriteLogFile(strLog);
+
   // Find the necessary Semaphores
   productSemaphores s(KEY_MUTEX, false);
   productSemaphores n(KEY_EMPTY, false);
@@ -116,20 +118,23 @@ int main(int argc, char* argv[])
     productItemQueue[productHeader->pNextQueueItem].readyToProcess = true;
 
     // Log what happened into System Log
-//    WriteLogFile("Produced Item in queue: " + productHeader->pNextQueueItem);
-    cout << myPID << " Produced Item in queue: " << productHeader->pNextQueueItem << endl;
+    string strLog = GetStringFromInt(childPid);
+    strLog.append(" Produced Item in Queue: ");
+    strLog.append(GetStringFromInt(productHeader->pNextQueueItem));
+    WriteLogFile(strLog);
+
+    cout << childPid << " Produced Item in Queue: " << productHeader->pNextQueueItem << endl;
 
     // Add an item to the next queue and wrap it around if it's > queue size
     productHeader->pNextQueueItem = (++productHeader->pNextQueueItem)%productHeader->QueueSize;
 
-  cout << "p-pCurrent:" << productHeader->pCurrent << endl;
-  cout << "p-pNextQueue:" << productHeader->pNextQueueItem << endl;
-  cout << "p-QueueSize:" << productHeader->QueueSize << endl;
-
   // Debug print queue
-//  for(int i=0;i<productHeader->QueueSize;i++ )
-//    cout << productItemQueue[i].itemValue << " ";
-//  cout << endl;
+  //cout << "p-pCurrent:" << productHeader->pCurrent << endl;
+  //cout << "p-pNextQueue:" << productHeader->pNextQueueItem << endl;
+  //cout << "p-QueueSize:" << productHeader->QueueSize << endl;
+  //  for(int i=0;i<productHeader->QueueSize;i++ )
+  //    cout << productItemQueue[i].itemValue << " ";
+  //  cout << endl;
 
     s.Signal();
     n.Signal();

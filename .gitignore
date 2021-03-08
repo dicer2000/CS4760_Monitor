@@ -1043,5 +1043,6 @@ dkms.conf
 master
 producer
 consumer
-libmonitor.*
 libmonitor.a
+libmonitor.o
+productSemaphores.o

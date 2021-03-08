@@ -78,5 +78,6 @@ Monitors are now the big question of the day.  I'm reviewing the lecture and als
 - 3/4/2021  - Built consumer; re-designed shared memory
 - 3/5/2021  - Debugging
 - 3/6/2021  - Continued debugging
+- 3/7/2021  - Additional testing; Changing log file; Upload
 
 *©2021 Brett W. Huffman*

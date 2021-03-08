@@ -62,6 +62,13 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
   // sure we don't exceed the max amount of processing time
   secondsStart = time(NULL);   // Start time
 
+  // Start Logging
+  string strLog = "***********************";
+  WriteLogFile(strLog);
+  strLog = "Started Monitor Process";
+  WriteLogFile(strLog);
+
+
   // Create the necessary Semaphores with the
   // productSemaphores class
   productSemaphores s(KEY_MUTEX, true, 1);
@@ -156,10 +163,6 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
   // Loop until timeout or interrupt exit
   while(!isKilled && !sigIntFlag && !((time(NULL)-secondsStart) > nSecondsToTerminate))
   {
-    // If any new products show up and < max processes are created,
-    // create a new consumer to consume it
-//    cout << productHeader->pNextQueueItem << " | " << productHeader->pCurrent << " \\ " << productHeader->QueueSize << endl;
-//    cout << productHeader->pNextQueueItem%productHeader->QueueSize << " | " << productHeader->pCurrent%productHeader->QueueSize << " \\ " << productHeader->QueueSize << endl;
 
     // Note :: We use the WNOHANG to call waitpid without blocking
     // If it returns 0, it does not have a PID waiting
@@ -203,6 +206,18 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
     cout << "Consumer " << vecConsumers[i] << " shutdown" << endl;
   }
 
+  // Check for timeout
+  if(sigIntFlag)
+  {
+    string strLog = "Monitor: Ctrl-C Shutdown";
+    WriteLogFile(strLog);
+  }
+  else
+  {
+    string strLog = "Monitor: Timeout Shutdown";
+    WriteLogFile(strLog);
+  }
+
   // Breakdown shared memory
   // Dedetach shared memory segment from process's address space
   cout << endl;
@@ -216,11 +231,15 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nNumberOfCo
       perror("main: shmctl: ");
   }
 
-  perror("Shared memory De-allocated");
-  cout << endl;
+  cout << "Shared memory De-allocated" << endl;
 
   if(isKilled)
     return EXIT_FAILURE;
+
+
+  strLog = "Monitor: Producers + Consumers terminated, dealocated shared memory and semaphore";
+  WriteLogFile(strLog);
+
 
   // Success!
   return EXIT_SUCCESS;

@@ -23,11 +23,6 @@ void sigQuitHandler(int sig){ // can be called asynchronously
   sigQuitFlag = 1; // set flag
 }
 
-// Critical Section Turn Flag
-extern int turn;
-
-const char* LogFile = "adder_log";
-
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -38,7 +33,12 @@ int main(int argc, char* argv[])
   // Register SIGQUIT handling
   signal(SIGINT, sigQuitHandler);
 
-  int turn = 0;   // Used for Critical Section
+  // Log startup of the child
+  pid_t childPid = getpid();
+  string strLog = "Consumer PID ";
+  strLog.append(GetStringFromInt(childPid));
+  strLog.append(" Started");
+  WriteLogFile(strLog);
 
   // Find the necessary Semaphores
   productSemaphores s(KEY_MUTEX, false);
@@ -95,7 +95,11 @@ int main(int argc, char* argv[])
     int nSleepTime = rand()%10+1;
 
     // Sleep for the random time
-    sleep(nSleepTime);
+    while(!sigQuitFlag && !nSleepTime)
+    {
+      sleep(nSleepTime);
+      nSleepTime--;
+    }
 
     // Get Exclusive Access via Semaphores
     n.Wait();
@@ -106,13 +110,10 @@ int main(int argc, char* argv[])
     if(productItemQueue[productHeader->pCurrent%productHeader->QueueSize].readyToProcess)
     {
 
-        // Debug print queue
-  for(int i=0;i<productHeader->QueueSize;i++ )
-    cout << productItemQueue[i].itemValue << " ";
-  cout << endl;
-//  cout << "c-pCurrent:" << productHeader->pCurrent << endl;
-//  cout << "c-pNextQueue:" << productHeader->pNextQueueItem << endl;
-//  cout << "c-QueueSize:" << productHeader->QueueSize << endl;
+      // Debug print queue
+      //for(int i=0;i<productHeader->QueueSize;i++ )
+      //  cout << productItemQueue[i].itemValue << " ";
+      //cout << endl;
 
 
       // Consume the value
@@ -124,6 +125,14 @@ int main(int argc, char* argv[])
 
       // Mark as consumed
       productItemQueue[productHeader->pCurrent%productHeader->QueueSize].readyToProcess = false;
+
+      // Log what happened into System Log
+      string strLog = GetStringFromInt(childPid);
+      strLog.append(" Consumed Item in Queue: ");
+      strLog.append(GetStringFromInt(productHeader->pCurrent));
+      WriteLogFile(strLog);
+
+      cout << childPid << " Consumed Item in Queue: " << productHeader->pCurrent << endl;
 
       // Increment Current and wrap it around if > queue size
       productHeader->pCurrent = (++productHeader->pCurrent)%productHeader->QueueSize;
