@@ -90,7 +90,7 @@ std::string GetTimeFormatted(const char* prePendString)
 }
 
 // Log file writing helper function
-bool WriteLogFile(std::string& logString, const std::string &LogFile)
+bool WriteLogFile(std::string& logString, std::string &LogFile)
 {
     // Open a file to write
     std::ofstream logFile (LogFile, std::ofstream::out | std::ofstream::app);
