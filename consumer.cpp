@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
   const int nItemToProcess = atoi(argv[1]);
 
   // And the log file string
-  const string strLogFile = argv[2];
+  string strLogFile = argv[2];
 
   // Seed the randomizer
   srand(time(NULL));

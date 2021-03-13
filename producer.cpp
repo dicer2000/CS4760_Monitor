@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
     exit(EXIT_FAILURE);
   }
   // And the log file string
-  const string strLogFile = argv[1];
+  string strLogFile = argv[1];
 
 
   // Log startup of the child
