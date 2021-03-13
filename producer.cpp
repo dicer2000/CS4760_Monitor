@@ -39,11 +39,21 @@ int main(int argc, char* argv[])
 
   int childPid = getpid(); // ProducerID to log
   
+  // Check the correct number of arguments
+  if(argc < 2)
+  {
+    perror("Producer: Incorrect argument found");
+    exit(EXIT_FAILURE);
+  }
+  // And the log file string
+  const string strLogFile = argv[1];
+
+
   // Log startup of the child
   string strLog = "Producer: PID ";
   strLog.append(GetStringFromInt(childPid));
   strLog.append(" started");
-  WriteLogFile(strLog);
+  WriteLogFile(strLog, strLogFile);
   cout << strLog << endl;
 
   // Find the necessary Semaphores
@@ -127,7 +137,7 @@ int main(int argc, char* argv[])
     strLog.append(GetStringFromInt(childPid));
     strLog.append(" added item to queue: ");
     strLog.append(GetStringFromInt(productHeader->pNextQueueItem));
-    WriteLogFile(strLog);
+    WriteLogFile(strLog, strLogFile);
     // And to the screen
     cout << strLog << endl;
 

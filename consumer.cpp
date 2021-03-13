@@ -29,14 +29,17 @@ int main(int argc, char* argv[])
 {
   // Get the Index to the array assigned to this
   // consumer to process
-  if(optind < 1)
+  if(argc < 2)
   {
-    cout << "Consumer: Incorrect argument found" << endl;
+    cout << "Args: " << argv[0] << endl;
     perror("Consumer: Incorrect argument found");
     exit(EXIT_FAILURE);
   }
   // We can now get the index to the item to process
-  const int nItemToProcess = atoi(argv[0]);
+  const int nItemToProcess = atoi(argv[1]);
+
+  // And the log file string
+  const string strLogFile = argv[2];
 
   // Seed the randomizer
   srand(time(NULL));
@@ -49,7 +52,7 @@ int main(int argc, char* argv[])
   string strLog = "Consumer: PID ";
   strLog.append(GetStringFromInt(nPid));
   strLog.append(" Started");
-  WriteLogFile(strLog);
+  WriteLogFile(strLog, strLogFile);
 
   // Find the necessary Semaphores
   productSemaphores s(KEY_MUTEX, false);
@@ -130,7 +133,7 @@ int main(int argc, char* argv[])
   strLog.append(GetStringFromInt(nPid));
   strLog.append(" Consumed Item in Queue: ");
   strLog.append(GetStringFromInt(nItemToProcess));
-  WriteLogFile(strLog);
+  WriteLogFile(strLog, strLogFile);
 
   cout << "Consumer: " << nPid << " consumed item in queue: " << nItemToProcess << endl;
 

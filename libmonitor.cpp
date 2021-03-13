@@ -39,10 +39,10 @@ void sigintHandler(int sig){ // can be called asynchronously
 
 
 // MonitorProcess - Process to start monitor process.  It kicks of Producers and Consumers as necessary
-int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberOfConsumers, int nSecondsToTerminate)
+int monitorProcess(string strLogFile, int nNumberOfProducers, int nMaxNumberOfConsumers, int nSecondsToTerminate)
 {
   // Check Input and exit if a param is bad
-  if(InputDataFile.size() < 1 || nNumberOfProducers < 1 || 
+  if(strLogFile.size() < 1 || nNumberOfProducers < 1 || 
     nMaxNumberOfConsumers < 1 || nSecondsToTerminate < 1)
   {
     errno = EINVAL;
@@ -65,7 +65,7 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
 
   // Start Logging
   string strLog = "*****  Started Monitor Process  *****";
-  WriteLogFile(strLog);
+  WriteLogFile(strLog, strLogFile);
 
 
   // Create the necessary Semaphores with the
@@ -112,12 +112,15 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
       productItemQueue[i].readyToProcess = false;
       productItemQueue[i].itemValue = 0.0f;
   }
+
+  strLog = "LibMonitor: Starting Producers";
+  WriteLogFile(strLog, strLogFile);
   
   // Start up producers by fork/exec nNumberOfProducers
   for(int i=0; i < nNumberOfProducers; i++)
   {
     // Fork and store pid Producer Vector
-    pid_t pid = forkProcess(ProducerProcess);
+    pid_t pid = forkProcess(ProducerProcess, strLogFile);
     if(pid > 0)
     {
       vecProducers.push_back(pid);
@@ -153,7 +156,7 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
     {
       // For a new consumer
       cout << "LibMonitor: Assigning " << productHeader->pCurrent%PRODUCT_QUEUE_LENGTH << " to new consumer" << endl;
-      pid_t pid = forkProcess(ConsumerProcess, productHeader->pCurrent%PRODUCT_QUEUE_LENGTH);
+      pid_t pid = forkProcess(ConsumerProcess, strLogFile, productHeader->pCurrent%PRODUCT_QUEUE_LENGTH);
       if(pid > 0)
       {
         // Keep track of the new consumer in consumer vector
@@ -223,13 +226,13 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
   if(sigIntFlag)
   {
     string strLog = "LibMonitor: Ctrl-C shutdown successful";
-    WriteLogFile(strLog);
+    WriteLogFile(strLog, strLogFile);
     cout << strLog << endl;
   }
   else
   {
     string strLog = "LibMonitor: Timeout shutdown successful";
-    WriteLogFile(strLog);
+    WriteLogFile(strLog, strLogFile);
     cout << strLog << endl;
   }
 
@@ -253,7 +256,7 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
 
 
   strLog = "LibMonitor: : Producers + Consumers terminated, de-alocated shared memory and semaphore";
-  WriteLogFile(strLog);
+  WriteLogFile(strLog, strLogFile);
 
 
   // Success!
@@ -261,7 +264,7 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
 }
 
 
-int forkProcess(string strProcess, int nArrayItem)
+int forkProcess(string strProcess, string strLogFile, int nArrayItem)
 {
         pid_t pid = fork();
         // No child made - exit with failure
@@ -275,14 +278,14 @@ int forkProcess(string strProcess, int nArrayItem)
         // Child process here - Assign out it's work
         if(pid == 0)
         {
-            // Execute child process without arguements
+            // Execute child process without array arguements
             if(nArrayItem < 0)
-              execl(strProcess.c_str(), (char*)0);
+              execl(strProcess.c_str(), strProcess.c_str(), strLogFile.c_str(), (char*)0);
             else
             {
               // Convert int to a c_str to send to exec
               string strArrayItem = GetStringFromInt(nArrayItem);
-              execl(strProcess.c_str(), strArrayItem.c_str(), (char*)0);
+              execl(strProcess.c_str(), strProcess.c_str(), strArrayItem.c_str(), strLogFile.c_str(), (char*)0);
             }
 
             fflush(stdout); // Mostly for debugging -> tty wasn't flushing

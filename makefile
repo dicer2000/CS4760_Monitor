@@ -51,4 +51,4 @@ clean:
 	rm -f $(appname3)
 	rm -f libmonitor.a
 	rm -f libmonitor.o
-	rm -f Monitor.log
+	rm -f logfile

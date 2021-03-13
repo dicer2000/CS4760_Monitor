@@ -67,8 +67,6 @@ const int PRODUCT_QUEUE_LENGTH = 20;
 const char* ProducerProcess = "./producer";
 const char* ConsumerProcess = "./consumer";
 
-const char* ProductLogFile = "./Monitor.log";
-
 /***************************************************
  * Helper Functions
  * *************************************************/
@@ -92,10 +90,10 @@ std::string GetTimeFormatted(const char* prePendString)
 }
 
 // Log file writing helper function
-bool WriteLogFile(std::string& logString)
+bool WriteLogFile(const std::string& logString, const std::string &LogFile)
 {
     // Open a file to write
-    std::ofstream logFile (ProductLogFile, std::ofstream::out | std::ofstream::app);
+    std::ofstream logFile (LogFile, std::ofstream::out | std::ofstream::app);
     if (logFile.is_open())
     {
         // Get the current local time

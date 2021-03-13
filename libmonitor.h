@@ -15,6 +15,6 @@ using namespace std;
 
 // Function Declarations
 int monitorProcess(string, int, int, int);
-int forkProcess(string, int nArrayItem = -1);
+int forkProcess(string, string, int nArrayItem = -1);
 
 #endif // LIBMONITOR
