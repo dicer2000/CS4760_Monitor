@@ -27,8 +27,12 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-  // Randomize the seed
-  srand(time(NULL));
+  // Fast Seed Random for better performance
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+
+  // Using nano-seconds instead of seconds
+  srand((time_t)ts.tv_nsec);
 
   // Register SIGQUIT handling
   signal(SIGINT, sigQuitHandler);
@@ -58,7 +62,7 @@ int main(int argc, char* argv[])
     // Get a reference to the shared memory, if available
     shm_id = shmget(KEY_SHMEM, 0, 0);
     if (shm_id == -1) {
-        perror("shmget1: ");
+        perror("Producer: Could not successfully find Shared Memory");
         exit(EXIT_FAILURE);
     }
 
@@ -71,14 +75,14 @@ int main(int argc, char* argv[])
     // Now we have the size - actually setup with shmget
     shm_id = shmget(KEY_SHMEM, realSize, 0);
     if (shm_id == -1) {
-        perror("shmget2: ");
+        perror("Producer: Could not successfully find Shared Memory");
         exit(EXIT_FAILURE);
     }
 
     // attach the shared memory segment to our process's address space
     shm_addr = (char*)shmat(shm_id, NULL, 0);
     if (!shm_addr) { /* operation failed. */
-        perror("shmat: ");
+        perror("Producer: Could not successfully attach Shared Memory");
         exit(EXIT_FAILURE);
     }
 
@@ -114,9 +118,8 @@ int main(int argc, char* argv[])
     // Push this onto the Queue
     productItemQueue[productHeader->pNextQueueItem].itemValue = fEasterEgg;
 
-    // Mark as ready to be process, but not to consume
+    // Mark as ready to be process
     productItemQueue[productHeader->pNextQueueItem].readyToProcess = true;
-    productItemQueue[productHeader->pNextQueueItem].readyToConsume = true;
 
     // Log what happened into System Log
     string strLog = GetStringFromInt(childPid);
@@ -124,7 +127,7 @@ int main(int argc, char* argv[])
     strLog.append(GetStringFromInt(productHeader->pNextQueueItem));
     WriteLogFile(strLog);
 
-    cout << childPid << " Produced Item in Queue: " << productHeader->pNextQueueItem << endl;
+    cout << "Producer: " << childPid << " added item to Queue: " << productHeader->pNextQueueItem << endl;
 
     // Add an item to the next queue and wrap it around if it's > queue size
     productHeader->pNextQueueItem = (++productHeader->pNextQueueItem)%productHeader->QueueSize;

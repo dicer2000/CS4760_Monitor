@@ -183,19 +183,19 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
       pid_t pid = forkProcess(ConsumerProcess, productHeader->pCurrent%PRODUCT_QUEUE_LENGTH);
       if(pid > 0)
       {
-        // Increment Current Index and wrap it around if > queue size
-        productHeader->pCurrent = (++productHeader->pCurrent)%PRODUCT_QUEUE_LENGTH;
-        // Set item as ready for Consumer
-        productItemQueue[productHeader->pCurrent%PRODUCT_QUEUE_LENGTH].readyToProcess = false;
         // Keep track of the new consumer in consumer vector
         vecConsumers.push_back(pid);
+
+        // Increment Current Index and wrap it around if > queue size
+        productHeader->pCurrent = (++productHeader->pCurrent)%PRODUCT_QUEUE_LENGTH;
+        
         // Report what happened ** Move Cursor left: \033[3D
         cout << "LibMonitor: Consumer " << pid << " started" << endl;
       }
     }
 
     s.Signal();
-
+    
     // Note :: We use the WNOHANG to call waitpid without blocking
     // If it returns 0, it does not have a PID waiting
     waitPID = waitpid(-1, &wstatus, WNOHANG | WUNTRACED | WCONTINUED);
@@ -215,8 +215,6 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
       for(vector<int>::const_iterator consumerItem = vecConsumers.begin(); 
           consumerItem != vecConsumers.end(); ++consumerItem)
       {
-
-          cout << "******* consumer " << *consumerItem << endl;
 
         // Find the deleted consumer and remove from the vector
         if(*consumerItem == waitPID)

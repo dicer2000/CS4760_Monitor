@@ -12,9 +12,9 @@ A Git repository was maintained with a public remote found here: https://github.
 
 There were some items I didn't understand about the project's operation.  Based on the feedback I did receive, I made these assumptions:
 
-1. Per my 2/27 conversation with Dr. Bhatia, the specified number of Producers and Consumers will be created and both will loop until the termination command (either timeout or Ctrl-C).
+1. Per my 2/27 conversation with Dr. Bhatia, the specified number of Producers will be created and both will loop until the termination command (either timeout or Ctrl-C). Consumers will be built on the fly and also terminate per parent's command.
 
-2. The queue that holds the Producer's products will be limited in size due to the use of Shared Memory, which does not lend itself well to dynamic templates.  So, I'm implementing it as a circular queue (or ring buffer).  The whole shared memory will look like this (I think):
+2. The queue that holds the Producer's products will be limited in size due to the use of Shared Memory, which does not lend itself well to dynamic templates.  So, I'm implementing it as a circular queue (or ring buffer).  The whole shared memory will look like this:
 ```
             +----------------+
 Queue header| pNextQueueItem |
@@ -67,6 +67,7 @@ Well, the biggest day-one issue was getting a static library to work with make a
 
 Monitors are now the big question of the day.  I'm reviewing the lecture and also some online resources.  My question is should it be implemented all within the monitor?  Or maybe it should be partially in the monitor and then also in the consumer.  Or maybe the consumer calls the monitor to lock?  I'm not sure how it works together.
 
+I had a huge, nasty bug to fix.  It took me several days to find it.  I was incrementing the currentItem pointer, before setting a flag to indicate processing is ready.  That worked 90% of the time, though it was technically incorrect.  In the end I removed the flag as it was redundant.  Once I figure it out and changed the order of things, it all lit up and ran correctly.
 
 ## Work Log
 
@@ -79,5 +80,8 @@ Monitors are now the big question of the day.  I'm reviewing the lecture and als
 - 3/5/2021  - Debugging
 - 3/6/2021  - Continued debugging
 - 3/7/2021  - Additional testing; Changing log file; Upload
+- 3/8/2021  - Debugging
+- 3/12/2021 - Debugging
+- 3/13/2021 - Debugging - Bug fixed! Testing
 
 *©2021 Brett W. Huffman*

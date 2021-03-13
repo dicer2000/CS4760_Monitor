@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
   strLog.append(GetStringFromInt(nItemToProcess));
   WriteLogFile(strLog);
 
-  cout << nPid << " Consumed Item in Queue: " << nItemToProcess << endl;
+  cout << "Consumer: " << nPid << " consumed item in queue: " << nItemToProcess << endl;
 
   s.Signal();
   e.Signal();
