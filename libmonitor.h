@@ -12,4 +12,4 @@ using namespace std;
 
 // Function Declarations
 int monitorProcess(string, int, int, int);
-int forkProcess(string);
+int forkProcess(string, int nArrayItem = -1);

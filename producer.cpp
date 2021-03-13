@@ -114,8 +114,9 @@ int main(int argc, char* argv[])
     // Push this onto the Queue
     productItemQueue[productHeader->pNextQueueItem].itemValue = fEasterEgg;
 
-    // Mark as ready to be Consumed
+    // Mark as ready to be process, but not to consume
     productItemQueue[productHeader->pNextQueueItem].readyToProcess = true;
+    productItemQueue[productHeader->pNextQueueItem].readyToConsume = true;
 
     // Log what happened into System Log
     string strLog = GetStringFromInt(childPid);

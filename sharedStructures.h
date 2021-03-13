@@ -40,6 +40,7 @@ struct ProductHeader {
 };
 struct ProductItem {
     bool readyToProcess;    // Ready to Process
+    bool readyToConsume;    // Ready to Consume
     float itemValue;        // The actual "Product" being returned 
                             // from the Producer - A little Easter Egg
 };

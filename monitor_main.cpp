@@ -22,7 +22,9 @@
 #include "libmonitor.h"
 
 // Constants
-const int MaxNumberOfChildren = 20;
+// Only 20 total: Producers + Consumers + 1 Monitor
+// Monitor always take 1, so we set to 19
+const int MaxNumberOfChildren = 19;
 const int MaxNumberOfSeconds = 100;
 
 // Forward declarations
@@ -89,6 +91,13 @@ int main(int argc, char* argv[])
     // Set the correct default values (min of both)
     nNumberOfConsumers = min(nNumberOfConsumers, MaxNumberOfChildren-nNumberOfProducers);
     nNumberOfSeconds = min(nNumberOfSeconds, MaxNumberOfSeconds);
+
+    if(nNumberOfConsumers < nNumberOfProducers)
+    {
+        perror ("master: Error: You must have more Consumers than Producers");
+        show_usage(argv[0]);
+        return EXIT_FAILURE;
+    }
 
     // Output what is going to happen
     cout << "Monitor starting: " << endl 
