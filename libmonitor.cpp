@@ -111,12 +111,11 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
   // Set all items in queue to empty
   for(int i=0; i < PRODUCT_QUEUE_LENGTH; i++)
   {
-      productItemQueue[i].readyToProcess = true;
+      productItemQueue[i].readyToProcess = false;
       productItemQueue[i].itemValue = 0.0f;
   }
   
   // Start up producers by fork/exec nNumberOfProducers
-  cout << "LibMonitor: Starting Producers" << endl;
   for(int i=0; i < nNumberOfProducers; i++)
   {
     // Fork and store pid Producer Vector
@@ -127,6 +126,7 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
 //      cout << "Producer " << vecProducers[i] << " started" << endl;
     }
   }
+  cout << "LibMonitor: Started " << vecProducers.size() << " Producers" << endl << endl;
 
   // Check that we actually have some producers
   if(vecProducers.size() < 1)
@@ -135,36 +135,12 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
     perror("LibMonitor: Could not create Producers");
     isKilled = true;
   }
-
-  // Start up Consumers
-  /*
-  cout << "Starting Consumers" << endl;
-  for(int i=0; i < nNumberOfConsumers; i++)
-  {
-    // Fork and store pid Producer Vector
-    pid_t pid = forkProcess(ConsumerProcess);
-    if(pid > 0)
-    {
-      vecConsumers.push_back(pid);
-      cout << "Consumer " << vecProducers[i] << " started" << endl;
-    }
-  }
-
-  // Check that we actually have some consumers
-  if(vecConsumers.size() < 1)
-  {
-    errno = ECANCELED;
-    perror("Could not create Consumers");
-    isKilled = true;
-  }
-  */
-
+  
   // Keep track of waits & pids
   pid_t waitPID;
   int wstatus;
 
-  cout << nMaxNumberOfConsumers << endl;
-
+  // This is the main loop of the operation.  It will
   // Loop until timeout or interrupt exit
   while(!isKilled && !sigIntFlag && !((time(NULL)-secondsStart) > nSecondsToTerminate))
   {
@@ -256,13 +232,15 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
   // Check for timeout
   if(sigIntFlag)
   {
-    string strLog = "LibMonitor: : Ctrl-C Shutdown";
+    string strLog = "LibMonitor: Ctrl-C Shutdown";
     WriteLogFile(strLog);
+    cout << strLog << endl;
   }
   else
   {
-    string strLog = "LibMonitor: : Timeout Shutdown";
+    string strLog = "LibMonitor: Timeout Shutdown";
     WriteLogFile(strLog);
+    cout << strLog << endl;
   }
 
   // Breakdown shared memory
