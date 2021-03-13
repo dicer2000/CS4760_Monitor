@@ -92,9 +92,8 @@ std::string GetTimeFormatted(const char* prePendString)
 // Log file writing helper function
 bool WriteLogFile(std::string& logString, std::string LogFile)
 {
-    const std::string strLocFile = LogFile.c_str();
     // Open a file to write
-    std::ofstream logFile (strLocFile.c_str(), std::ofstream::out | std::ofstream::app);
+    std::ofstream logFile (LogFile.c_str(), std::ofstream::out | std::ofstream::app);
     if (logFile.is_open())
     {
         // Get the current local time
