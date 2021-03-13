@@ -64,9 +64,7 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
   int nConsumerCount = 0;
 
   // Start Logging
-  string strLog = "***********************";
-  WriteLogFile(strLog);
-  strLog = "Started LibMonitor Process";
+  string strLog = "*****  Started Monitor Process  *****";
   WriteLogFile(strLog);
 
 
@@ -123,7 +121,6 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
     if(pid > 0)
     {
       vecProducers.push_back(pid);
-//      cout << "Producer " << vecProducers[i] << " started" << endl;
     }
   }
   cout << "LibMonitor: Started " << vecProducers.size() << " Producers" << endl << endl;
@@ -166,7 +163,7 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
         productHeader->pCurrent = (++productHeader->pCurrent)%PRODUCT_QUEUE_LENGTH;
         
         // Report what happened ** Move Cursor left: \033[3D
-        cout << "LibMonitor: Consumer " << pid << " started" << endl;
+        cout << "LibMonitor: Consumer PID " << pid << " started" << endl;
       }
     }
 
@@ -186,20 +183,13 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
     // Child processed correctly
     if (WIFEXITED(wstatus) && waitPID > 0)
     {
-
-      // Find the Consumer in the ConsumerVector
-      for(vector<int>::const_iterator consumerItem = vecConsumers.begin(); 
-          consumerItem != vecConsumers.end(); ++consumerItem)
+      // Remove the consumer from the consumer array
+      for(int i=0; i < vecConsumers.size(); i++)
       {
-
-        // Find the deleted consumer and remove from the vector
-        if(*consumerItem == waitPID)
+        if(vecConsumers[i] == waitPID)
         {
-          cout << "LibMonitor: Removing consumer " << *consumerItem << endl;
-//          cout << vecConsumers.size() << endl;
-          vecConsumers.erase(consumerItem);
-//          vecConsumers.shrink_to_fit();
-//          cout << vecConsumers.size() << endl;
+          cout << endl; // Put in a hard return.  Seems to look good
+          vecConsumers.erase( vecConsumers.begin() + i );
           break;
         }
       }
@@ -219,26 +209,26 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
   for(int i=0; i < vecProducers.size(); i++)
   {
     kill(vecProducers[i], SIGQUIT); 
-    cout << "LibMonitor: Producer " << vecProducers[i] << " signaled shutdown" << endl;
+    cout << "LibMonitor: Producer PID " << vecProducers[i] << " signaled shutdown" << endl;
   }
 
   cout << "LibMonitor: Shutting down consumers" << endl;
   for(int i=0; i < vecConsumers.size(); i++)
   {
     kill(vecConsumers[i], SIGQUIT); 
-    cout << "LibMonitor: Consumer " << vecConsumers[i] << " signaled shutdown" << endl;
+    cout << "LibMonitor: Consumer PID " << vecConsumers[i] << " signaled shutdown" << endl;
   }
 
   // Check for timeout
   if(sigIntFlag)
   {
-    string strLog = "LibMonitor: Ctrl-C Shutdown";
+    string strLog = "LibMonitor: Ctrl-C shutdown successful";
     WriteLogFile(strLog);
     cout << strLog << endl;
   }
   else
   {
-    string strLog = "LibMonitor: Timeout Shutdown";
+    string strLog = "LibMonitor: Timeout shutdown successful";
     WriteLogFile(strLog);
     cout << strLog << endl;
   }
@@ -256,13 +246,13 @@ int monitorProcess(string InputDataFile, int nNumberOfProducers, int nMaxNumberO
       perror("LibMonitor: Error deallocating shared memory ");
   }
 
-  cout << "LibMonitor: Shared memory De-allocated" << endl;
+  cout << "LibMonitor: Shared memory De-allocated" << endl << endl;
 
   if(isKilled)
     return EXIT_FAILURE;
 
 
-  strLog = "LibMonitor: : Producers + Consumers terminated, dealocated shared memory and semaphore";
+  strLog = "LibMonitor: : Producers + Consumers terminated, de-alocated shared memory and semaphore";
   WriteLogFile(strLog);
 
 

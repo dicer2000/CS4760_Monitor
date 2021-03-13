@@ -10,6 +10,8 @@
  * Due Mar 12, 2021
  * sharedStructures.h file for project
  ********************************************/
+#ifndef SHAREDSTRUCTURES_H
+#define SHAREDSTRUCTURES_H
 
 #include <sys/ipc.h>
 #include <sys/shm.h>
@@ -121,3 +123,5 @@ std::string GetStringFromInt(const int nVal)
     free(sDep);
     return strFinalVal;
 }
+
+#endif // SHAREDSTRUCTURES_H

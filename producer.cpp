@@ -40,10 +40,11 @@ int main(int argc, char* argv[])
   int childPid = getpid(); // ProducerID to log
   
   // Log startup of the child
-  string strLog = "Producer PID ";
+  string strLog = "Producer: PID ";
   strLog.append(GetStringFromInt(childPid));
-  strLog.append(" Started");
+  strLog.append(" started");
   WriteLogFile(strLog);
+  cout << strLog << endl;
 
   // Find the necessary Semaphores
   productSemaphores s(KEY_MUTEX, false);
@@ -122,12 +123,13 @@ int main(int argc, char* argv[])
     productItemQueue[productHeader->pNextQueueItem].readyToProcess = true;
 
     // Log what happened into System Log
-    string strLog = GetStringFromInt(childPid);
-    strLog.append(" Produced Item in Queue: ");
+    string strLog = "Producer: PID ";
+    strLog.append(GetStringFromInt(childPid));
+    strLog.append(" added item to queue: ");
     strLog.append(GetStringFromInt(productHeader->pNextQueueItem));
     WriteLogFile(strLog);
-
-    cout << "Producer: " << childPid << " added item to Queue: " << productHeader->pNextQueueItem << endl;
+    // And to the screen
+    cout << strLog << endl;
 
     // Add an item to the next queue and wrap it around if it's > queue size
     productHeader->pNextQueueItem = (++productHeader->pNextQueueItem)%productHeader->QueueSize;

@@ -9,7 +9,8 @@
  * Due Mar 12, 2021
  * productSemaphores .h file for project
  ********************************************/
-#pragma once
+#ifndef PRODUCTSEMAPHORES
+#define PRODUCTSEMAPHORES
 
 #include <sys/sem.h>
 
@@ -38,3 +39,5 @@ class productSemaphores
     void Signal();    
 
 };
+
+#endif // PRODUCTSEMAPHORES

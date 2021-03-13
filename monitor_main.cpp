@@ -39,7 +39,8 @@ int main(int argc, char* argv[])
     // of the incoming arguments. After that, all processing
     // will happen within the llibmonitor library functions.
 
-    cout << endl << "monitor app by Brett Huffman for CMP SCI 4760" << endl << endl;
+    string strLog =  "Monitor app by Brett Huffman for CMP SCI 4760";
+    cout << endl << strLog << endl << endl;
 
     // Argument processing
     int opt;
@@ -115,7 +116,7 @@ int main(int argc, char* argv[])
 static void show_usage(std::string name)
 {
     std::cerr << std::endl
-              << name << " - monitor app by Brett Huffman for CMP SCI 4760" << std::endl
+              << name << " - Monitor app by Brett Huffman for CMP SCI 4760" << std::endl
               << std::endl
               << "Usage:\t" << name << " [-h]" << std::endl
               << "\t" << name << " [-h] [-o logfile] [-p m] [-c n] [-t time]" << std::endl

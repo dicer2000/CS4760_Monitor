@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 
   // Log startup of the child
   const pid_t nPid = getpid();
-  string strLog = "Consumer PID ";
+  string strLog = "Consumer: PID ";
   strLog.append(GetStringFromInt(nPid));
   strLog.append(" Started");
   WriteLogFile(strLog);
@@ -126,7 +126,8 @@ int main(int argc, char* argv[])
   productItemQueue[nItemToProcess].readyToProcess = false;
 
   // Log what happened into System Log
-  strLog = GetStringFromInt(nPid);
+  strLog = "Consumer: PID ";
+  strLog.append(GetStringFromInt(nPid));
   strLog.append(" Consumed Item in Queue: ");
   strLog.append(GetStringFromInt(nItemToProcess));
   WriteLogFile(strLog);
