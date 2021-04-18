@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
     perror("Consumer: Could not successfully find Semaphores");
     exit(EXIT_FAILURE);
   }
-
+  
   // Open the connection to shared memory
   // Allocate the shared memory
   // And get ready for read/write

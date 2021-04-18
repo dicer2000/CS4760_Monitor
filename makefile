@@ -9,7 +9,7 @@ srcfiles := $(shell find . -name "monitor*.cpp") ./productSemaphores.cpp
 
 # For debugging
 #$(error   VAR is $(srcfiles))
-
+CXXFLAGS := -Wpadded
 LDLIBS := libmonitor.a
 objects1  := $(patsubst %.cpp, %.o, $(srcfiles))
 

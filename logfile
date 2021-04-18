@@ -1,0 +1,204 @@
+18:33:39 *****  Started Monitor Process  *****
+18:33:39 LibMonitor: Starting Producers
+18:33:39 Producer: PID 70331 started
+18:33:39 Producer: PID 70330 started
+18:33:42 Producer: PID 70330 added item to queue: 0
+18:33:42 Producer: PID 70331 added item to queue: 1
+18:33:42 Consumer: PID 70342 Started
+18:33:42 Consumer: PID 70343 Started
+18:33:42 Consumer: PID 70342 Consumed Item in Queue: 0
+18:33:42 Consumer: PID 70343 Consumed Item in Queue: 1
+18:33:46 Producer: PID 70330 added item to queue: 2
+18:33:46 Producer: PID 70331 added item to queue: 3
+18:33:46 Consumer: PID 70344 Started
+18:33:46 Consumer: PID 70344 Consumed Item in Queue: 2
+18:33:46 Consumer: PID 70345 Started
+18:33:46 Consumer: PID 70345 Consumed Item in Queue: 3
+18:33:49 Producer: PID 70330 added item to queue: 4
+18:33:49 Producer: PID 70331 added item to queue: 5
+18:33:49 Consumer: PID 70352 Started
+18:33:49 Consumer: PID 70352 Consumed Item in Queue: 4
+18:33:49 Consumer: PID 70353 Started
+18:33:49 Consumer: PID 70353 Consumed Item in Queue: 5
+18:33:51 Producer: PID 70330 added item to queue: 6
+18:33:51 Producer: PID 70331 added item to queue: 7
+18:33:51 Consumer: PID 70354 Started
+18:33:51 Consumer: PID 70354 Consumed Item in Queue: 6
+18:33:51 Consumer: PID 70355 Started
+18:33:51 Consumer: PID 70355 Consumed Item in Queue: 7
+18:33:56 Producer: PID 70330 added item to queue: 8
+18:33:56 Producer: PID 70331 added item to queue: 9
+18:33:56 Consumer: PID 70362 Started
+18:33:56 Consumer: PID 70363 Started
+18:33:56 Consumer: PID 70362 Consumed Item in Queue: 8
+18:33:56 Consumer: PID 70363 Consumed Item in Queue: 9
+18:33:59 Producer: PID 70331 added item to queue: 10
+18:33:59 Producer: PID 70330 added item to queue: 11
+18:33:59 Consumer: PID 70371 Started
+18:33:59 Consumer: PID 70370 Started
+18:33:59 Consumer: PID 70371 Consumed Item in Queue: 11
+18:33:59 Consumer: PID 70370 Consumed Item in Queue: 10
+18:34:03 Producer: PID 70331 added item to queue: 12
+18:34:03 Consumer: PID 70379 Started
+18:34:03 Producer: PID 70330 added item to queue: 13
+18:34:03 Consumer: PID 70379 Consumed Item in Queue: 12
+18:34:03 Consumer: PID 70380 Started
+18:34:03 Consumer: PID 70380 Consumed Item in Queue: 13
+18:34:07 Producer: PID 70331 added item to queue: 14
+18:34:07 Producer: PID 70330 added item to queue: 15
+18:34:07 Consumer: PID 70381 Started
+18:34:07 Consumer: PID 70381 Consumed Item in Queue: 14
+18:34:07 Consumer: PID 70382 Started
+18:34:07 Consumer: PID 70382 Consumed Item in Queue: 15
+18:34:10 Producer: PID 70331 added item to queue: 16
+18:34:10 Consumer: PID 70389 Started
+18:34:10 Consumer: PID 70389 Consumed Item in Queue: 16
+18:34:10 Producer: PID 70330 added item to queue: 17
+18:34:10 Consumer: PID 70390 Started
+18:34:10 Consumer: PID 70390 Consumed Item in Queue: 17
+18:34:14 Producer: PID 70331 added item to queue: 18
+18:34:14 Consumer: PID 70397 Started
+18:34:14 Consumer: PID 70397 Consumed Item in Queue: 18
+18:34:14 Producer: PID 70330 added item to queue: 19
+18:34:14 Consumer: PID 70398 Started
+18:34:14 Consumer: PID 70398 Consumed Item in Queue: 19
+18:34:17 Producer: PID 70331 added item to queue: 0
+18:34:17 Consumer: PID 70399 Started
+18:34:17 Consumer: PID 70399 Consumed Item in Queue: 0
+18:34:17 Producer: PID 70330 added item to queue: 1
+18:34:17 Consumer: PID 70400 Started
+18:34:17 Consumer: PID 70400 Consumed Item in Queue: 1
+18:34:20 Producer: PID 70331 added item to queue: 2
+18:34:20 Consumer: PID 70407 Started
+18:34:20 Consumer: PID 70407 Consumed Item in Queue: 2
+18:34:20 Producer: PID 70330 added item to queue: 3
+18:34:20 Consumer: PID 70408 Started
+18:34:20 Consumer: PID 70408 Consumed Item in Queue: 3
+18:34:24 Producer: PID 70331 added item to queue: 4
+18:34:24 Consumer: PID 70415 Started
+18:34:24 Consumer: PID 70415 Consumed Item in Queue: 4
+18:34:24 Producer: PID 70330 added item to queue: 5
+18:34:24 Consumer: PID 70416 Started
+18:34:24 Consumer: PID 70416 Consumed Item in Queue: 5
+18:34:29 Producer: PID 70331 added item to queue: 6
+18:34:29 Consumer: PID 70423 Started
+18:34:29 Consumer: PID 70423 Consumed Item in Queue: 6
+18:34:29 Producer: PID 70330 added item to queue: 7
+18:34:29 Consumer: PID 70424 Started
+18:34:29 Consumer: PID 70424 Consumed Item in Queue: 7
+18:34:31 Producer: PID 70331 added item to queue: 8
+18:34:31 Consumer: PID 70425 Started
+18:34:31 Consumer: PID 70425 Consumed Item in Queue: 8
+18:34:31 Producer: PID 70330 added item to queue: 9
+18:34:31 Consumer: PID 70426 Started
+18:34:31 Consumer: PID 70426 Consumed Item in Queue: 9
+18:34:32 Producer: PID 70331 added item to queue: 10
+18:34:32 Consumer: PID 70427 Started
+18:34:32 Consumer: PID 70427 Consumed Item in Queue: 10
+18:34:32 Producer: PID 70330 added item to queue: 11
+18:34:32 Consumer: PID 70428 Started
+18:34:32 Consumer: PID 70428 Consumed Item in Queue: 11
+18:34:36 Producer: PID 70331 added item to queue: 12
+18:34:36 Consumer: PID 70435 Started
+18:34:36 Consumer: PID 70435 Consumed Item in Queue: 12
+18:34:36 Producer: PID 70330 added item to queue: 13
+18:34:36 Consumer: PID 70436 Started
+18:34:36 Consumer: PID 70436 Consumed Item in Queue: 13
+18:34:37 Producer: PID 70331 added item to queue: 14
+18:34:37 Consumer: PID 70437 Started
+18:34:37 Consumer: PID 70437 Consumed Item in Queue: 14
+18:34:37 Producer: PID 70330 added item to queue: 15
+18:34:37 Consumer: PID 70438 Started
+18:34:37 Consumer: PID 70438 Consumed Item in Queue: 15
+18:34:41 Producer: PID 70331 added item to queue: 16
+18:34:41 Consumer: PID 70445 Started
+18:34:41 Consumer: PID 70445 Consumed Item in Queue: 16
+18:34:41 Producer: PID 70330 added item to queue: 17
+18:34:41 Consumer: PID 70446 Started
+18:34:41 Consumer: PID 70446 Consumed Item in Queue: 17
+18:34:42 Producer: PID 70331 added item to queue: 18
+18:34:42 Consumer: PID 70447 Started
+18:34:42 Consumer: PID 70447 Consumed Item in Queue: 18
+18:34:42 Producer: PID 70330 added item to queue: 19
+18:34:42 Consumer: PID 70448 Started
+18:34:42 Consumer: PID 70448 Consumed Item in Queue: 19
+18:34:44 Producer: PID 70331 added item to queue: 0
+18:34:44 Consumer: PID 70455 Started
+18:34:44 Consumer: PID 70455 Consumed Item in Queue: 0
+18:34:44 Producer: PID 70330 added item to queue: 1
+18:34:44 Consumer: PID 70456 Started
+18:34:44 Consumer: PID 70456 Consumed Item in Queue: 1
+18:34:47 Producer: PID 70331 added item to queue: 2
+18:34:47 Consumer: PID 70457 Started
+18:34:47 Consumer: PID 70457 Consumed Item in Queue: 2
+18:34:47 Producer: PID 70330 added item to queue: 3
+18:34:47 Consumer: PID 70458 Started
+18:34:47 Consumer: PID 70458 Consumed Item in Queue: 3
+18:34:51 Producer: PID 70331 added item to queue: 4
+18:34:51 Consumer: PID 70465 Started
+18:34:51 Consumer: PID 70465 Consumed Item in Queue: 4
+18:34:51 Producer: PID 70330 added item to queue: 5
+18:34:51 Consumer: PID 70466 Started
+18:34:51 Consumer: PID 70466 Consumed Item in Queue: 5
+18:34:52 Producer: PID 70331 added item to queue: 6
+18:34:52 Consumer: PID 70467 Started
+18:34:52 Consumer: PID 70467 Consumed Item in Queue: 6
+18:34:52 Producer: PID 70330 added item to queue: 7
+18:34:52 Consumer: PID 70468 Started
+18:34:52 Consumer: PID 70468 Consumed Item in Queue: 7
+18:34:55 Producer: PID 70331 added item to queue: 8
+18:34:55 Consumer: PID 70475 Started
+18:34:55 Consumer: PID 70475 Consumed Item in Queue: 8
+18:34:55 Producer: PID 70330 added item to queue: 9
+18:34:55 Consumer: PID 70476 Started
+18:34:55 Consumer: PID 70476 Consumed Item in Queue: 9
+18:34:59 Producer: PID 70331 added item to queue: 10
+18:34:59 Consumer: PID 70483 Started
+18:34:59 Consumer: PID 70483 Consumed Item in Queue: 10
+18:34:59 Producer: PID 70330 added item to queue: 11
+18:34:59 Consumer: PID 70484 Started
+18:34:59 Consumer: PID 70484 Consumed Item in Queue: 11
+18:35:00 Producer: PID 70331 added item to queue: 12
+18:35:00 Consumer: PID 70486 Started
+18:35:00 Consumer: PID 70486 Consumed Item in Queue: 12
+18:35:00 Producer: PID 70330 added item to queue: 13
+18:35:00 Consumer: PID 70487 Started
+18:35:00 Consumer: PID 70487 Consumed Item in Queue: 13
+18:35:03 Producer: PID 70331 added item to queue: 14
+18:35:03 Consumer: PID 70494 Started
+18:35:03 Consumer: PID 70494 Consumed Item in Queue: 14
+18:35:03 Producer: PID 70330 added item to queue: 15
+18:35:03 Consumer: PID 70495 Started
+18:35:03 Consumer: PID 70495 Consumed Item in Queue: 15
+18:35:08 Producer: PID 70331 added item to queue: 16
+18:35:08 Consumer: PID 70502 Started
+18:35:08 Consumer: PID 70502 Consumed Item in Queue: 16
+18:35:08 Producer: PID 70330 added item to queue: 17
+18:35:08 Consumer: PID 70503 Started
+18:35:08 Consumer: PID 70503 Consumed Item in Queue: 17
+18:35:10 Producer: PID 70331 added item to queue: 18
+18:35:10 Consumer: PID 70504 Started
+18:35:10 Consumer: PID 70504 Consumed Item in Queue: 18
+18:35:10 Producer: PID 70330 added item to queue: 19
+18:35:10 Consumer: PID 70505 Started
+18:35:10 Consumer: PID 70505 Consumed Item in Queue: 19
+18:35:13 Producer: PID 70331 added item to queue: 0
+18:35:13 Consumer: PID 70512 Started
+18:35:13 Consumer: PID 70512 Consumed Item in Queue: 0
+18:35:13 Producer: PID 70330 added item to queue: 1
+18:35:13 Consumer: PID 70513 Started
+18:35:13 Consumer: PID 70513 Consumed Item in Queue: 1
+18:35:16 Producer: PID 70331 added item to queue: 2
+18:35:16 Consumer: PID 70514 Started
+18:35:16 Consumer: PID 70514 Consumed Item in Queue: 2
+18:35:16 Producer: PID 70330 added item to queue: 3
+18:35:16 Consumer: PID 70515 Started
+18:35:16 Consumer: PID 70515 Consumed Item in Queue: 3
+18:35:18 Producer: PID 70331 added item to queue: 4
+18:35:18 Consumer: PID 70522 Started
+18:35:18 Consumer: PID 70522 Consumed Item in Queue: 4
+18:35:18 Producer: PID 70330 added item to queue: 5
+18:35:18 Consumer: PID 70523 Started
+18:35:18 Consumer: PID 70523 Consumed Item in Queue: 5
+18:35:20 LibMonitor: Timeout shutdown successful
+18:35:20 LibMonitor: : Producers + Consumers terminated, de-alocated shared memory and semaphore

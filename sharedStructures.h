@@ -41,9 +41,9 @@ struct ProductHeader {
     int QueueSize;   // Size of the queue
 };
 struct ProductItem {
-    bool readyToProcess;    // Ready to Process
     float itemValue;        // The actual "Product" being returned 
                             // from the Producer - A little Easter Egg
+    bool readyToProcess;    // Ready to Process
 };
 
 const key_t KEY_SHMEM = 0x54321;  // Shared key
